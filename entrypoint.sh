@@ -2,8 +2,8 @@
 set -ex
 #set -x
 
-test "x$1" == "xbash" && exit 0
+echo "$1" | grep -i '^exit' > /dev/null && exit 0
 
-echo "$MYSQL_HOST is host"
+./maintain_db.sh /volumes/CommandVolume/WATCHLIST /volumes/CommandVolume/CONFIG $MYSQL_ROOT_PASSWORD $MYSQL_HOST $MYSQL_PORT
 
 exit $?
