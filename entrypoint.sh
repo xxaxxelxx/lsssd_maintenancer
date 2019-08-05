@@ -4,6 +4,6 @@ set -ex
 
 echo "$1" | grep -i '^exit' > /dev/null && exit 0
 
-./maintain_db.sh /volumes/CommandVolume/WATCHLIST /volumes/CommandVolume/CONFIG $MYSQL_ROOT_PASSWORD $MYSQL_HOST $MYSQL_PORT
+./maintain_db.sh /volumes/CommandVolume/WATCHLIST /volumes/CommandVolume/CONFIG_MASTER $MYSQL_ROOT_PASSWORD $MYSQL_HOST $MYSQL_PORT
 
 exit $?
