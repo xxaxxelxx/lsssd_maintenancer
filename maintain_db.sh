@@ -22,7 +22,7 @@ while true; do
     while read LINE;do
 	MNTPNT="$(echo "$LINE" | awk '{print $1}')"
 	test "x$MNTPNT" == "x" && continue
-	echo "INSERT IGNORE INTO status (mntpnt, alive, status, since) VALUES ('$MNTPNT', 0, 1, 0);" | $MYSQLCMD
+	echo "INSERT IGNORE INTO status (mntpnt, alive, status, since) VALUES ('$MNTPNT', 0, 0, 0);" | $MYSQLCMD
     done
     )
 
