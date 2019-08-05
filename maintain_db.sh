@@ -16,18 +16,8 @@ while true; do
     fi
     . $CONFIG
 
-    echo "$DETECTORHOST_TELEMETRY_ALIVE_SECONDS_LIMIT" > /tmp/zzz
-    echo "$MOUNTPOINT_ALIVE_SECONDS_LIMIT" >> /tmp/zzz
-    
-    #continue
-    echo "INSERT INTO config (confkey, confvalue) VALUES ('DETECTORHOST_TELEMETRY_ALIVE_SECONDS_LIMIT', $DETECTORHOST_TELEMETRY_ALIVE_SECONDS_LIMIT) ON DUPLICATE KEY UPDATE confkey='DETECTORHOST_TELEMETRY_ALIVE_SECONDS_LIMIT',confvalue=$DETECTORHOST_TELEMETRY_ALIVE_SECONDS_LIMIT;" | $MYSQLCMD
     echo "INSERT INTO config (confkey, confvalue) VALUES ('MOUNTPOINT_ALIVE_SECONDS_LIMIT', $MOUNTPOINT_ALIVE_SECONDS_LIMIT) ON DUPLICATE KEY UPDATE confkey='MOUNTPOINT_ALIVE_SECONDS_LIMIT',confvalue=$MOUNTPOINT_ALIVE_SECONDS_LIMIT;" | $MYSQLCMD
     
-    # WATCHLIST
-    if [ ! -r "$WATCHLIST" ]; then
-	test $DETECTORHOST_TELEMETRY_ALIVE_SECONDS_LIMIT -eq 0 && exit 0 || sleep $DETECTORHOST_TELEMETRY_ALIVE_SECONDS_LIMIT
-	continue
-    fi
     cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | (
     while read LINE;do
 	MNTPNT="$(echo "$LINE" | awk '{print $1}')"
@@ -41,7 +31,7 @@ while true; do
 	    cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | grep -w $MNTPNT > /dev/null || echo "DELETE FROM status WHERE mntpnt = '$MNTPNT';" | $MYSQLCMD
 	done
     )
-    test $DETECTORHOST_TELEMETRY_ALIVE_SECONDS_LIMIT -eq 0 && exit 0 || sleep $DETECTORHOST_TELEMETRY_ALIVE_SECONDS_LIMIT
+    sleep 5
 done
 
 exit $?
