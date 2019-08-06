@@ -1,22 +1,21 @@
 #!/bin/bash
-test $# -lt 5 && echo "Five arguments needed: WATCHLIST CONFIG MYSQL_ROOT_PASSWORD MYSQL_HOST MYSQL_PORT" && exit 1
-WATCHLIST="$1"
-CONFIG="$2"
-MYSQL_ROOT_PASSWORD=$3
-MYSQL_HOST=$4
-MYSQL_PORT=$5
-
+test $# -lt 4 && echo "Some arguments needed: MYSQL_ROOT_PASSWORD MYSQL_HOST MYSQL_PORT WATCHLIST CONFIG" && exit 1
+MYSQL_ROOT_PASSWORD=$1
+MYSQL_HOST=$2
+MYSQL_PORT=$3
+WATCHLIST="$4"
+CONFIG="$5"
 MYSQLCMD="mysql -u root -p$MYSQL_ROOT_PASSWORD -D silenceDB -h $MYSQL_HOST -P $MYSQL_PORT"
 
 while true; do
 
     # CONFIG
-    if [ ! -r "$CONFIG" ]; then
-	exit 1
-    fi
-    . $CONFIG
-
-    echo "INSERT INTO config (confkey, confvalue) VALUES ('MOUNTPOINT_ALIVE_SECONDS_LIMIT', $MOUNTPOINT_ALIVE_SECONDS_LIMIT) ON DUPLICATE KEY UPDATE confkey='MOUNTPOINT_ALIVE_SECONDS_LIMIT',confvalue=$MOUNTPOINT_ALIVE_SECONDS_LIMIT;" | $MYSQLCMD
+    # DISALBED / UNUSED
+    #if [ ! -r "$CONFIG" ]; then
+    #	exit 1
+    #fi
+    #. $CONFIG
+    #echo "INSERT INTO config (confkey, confvalue) VALUES ('MOUNTPOINT_ALIVE_SECONDS_LIMIT', $MOUNTPOINT_ALIVE_SECONDS_LIMIT) ON DUPLICATE KEY UPDATE confkey='MOUNTPOINT_ALIVE_SECONDS_LIMIT',confvalue=$MOUNTPOINT_ALIVE_SECONDS_LIMIT;" | $MYSQLCMD
     
     cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | (
     while read LINE;do
