@@ -22,6 +22,7 @@ while true; do
 	MNTPNT="$(echo "$LINE" | awk '{print $1}')"
 	test "x$MNTPNT" == "x" && continue
 	echo "INSERT IGNORE INTO status (mntpnt, alive, status, since) VALUES ('$MNTPNT', 0, 0, 0);" | $MYSQLCMD
+	#sleep 1
     done
     )
 
@@ -30,7 +31,7 @@ while true; do
 	    cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | grep -w $MNTPNT > /dev/null || echo "DELETE FROM status WHERE mntpnt = '$MNTPNT';" | $MYSQLCMD
 	done
     )
-    sleep 5
+    sleep 20
 done
 
 exit $?
