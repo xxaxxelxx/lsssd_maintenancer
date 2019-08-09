@@ -18,12 +18,14 @@ while true; do
     #echo "INSERT INTO config (confkey, confvalue) VALUES ('MOUNTPOINT_ALIVE_SECONDS_LIMIT', $MOUNTPOINT_ALIVE_SECONDS_LIMIT) ON DUPLICATE KEY UPDATE confkey='MOUNTPOINT_ALIVE_SECONDS_LIMIT',confvalue=$MOUNTPOINT_ALIVE_SECONDS_LIMIT;" | $MYSQLCMD
     
     cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | (
+    SQLSTRG=""
     while read LINE;do
 	MNTPNT="$(echo "$LINE" | awk '{print $1}')"
 	test "x$MNTPNT" == "x" && continue
-	echo "INSERT IGNORE INTO status (mntpnt, alive, status, since) VALUES ('$MNTPNT', 0, 0, 0);" | $MYSQLCMD
+	SQLSTRG="${SQLSTRG}INSERT IGNORE INTO status (mntpnt, alive, status, since) VALUES ('$MNTPNT', 0, 0, 0);"
 	#sleep 1
     done
+    echo "$SQLSTRG" | $MYSQLCMD
     )
 
     echo "select mntpnt from status;"  | $MYSQLCMD --skip-column-names | (
