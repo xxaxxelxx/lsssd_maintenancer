@@ -33,7 +33,7 @@ while true; do
 	    cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | grep -w $MNTPNT > /dev/null || echo "DELETE FROM status WHERE mntpnt = '$MNTPNT';" | $MYSQLCMD
 	done
     )
-    sleep 20
+    sleep 300
 done
 
 exit $?
