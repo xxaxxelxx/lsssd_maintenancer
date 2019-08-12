@@ -20,7 +20,9 @@ while true; do
     MD5SUMPRE="$MD5SUM"
     MD5SUM="$(cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | md5sum | awk '{print $1}')"
     test "x$MD5SUMPRE" == "x$MD5SUM" && sleep 10 && continue
-    
+
+    date > DONE
+
     cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | (
     SQLSTRG=""
     while read LINE;do
