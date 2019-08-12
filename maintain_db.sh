@@ -16,6 +16,10 @@ while true; do
     #fi
     #. $CONFIG
     #echo "INSERT INTO config (confkey, confvalue) VALUES ('MOUNTPOINT_ALIVE_SECONDS_LIMIT', $MOUNTPOINT_ALIVE_SECONDS_LIMIT) ON DUPLICATE KEY UPDATE confkey='MOUNTPOINT_ALIVE_SECONDS_LIMIT',confvalue=$MOUNTPOINT_ALIVE_SECONDS_LIMIT;" | $MYSQLCMD
+
+    MD5SUMPRE="$MD5SUM"
+    MD5SUM="$(cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | md5sum | awk '{print $1}')"
+    test "x$MD5SUMPRE" == "x$MD5SUM" && sleep 10 && continue
     
     cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | (
     SQLSTRG=""
@@ -33,7 +37,7 @@ while true; do
 	    cat "$WATCHLIST" | grep -v -e '^#' -e '^\s*$' | awk '{print $1}' | grep -w $MNTPNT > /dev/null || echo "DELETE FROM status WHERE mntpnt = '$MNTPNT';" | $MYSQLCMD
 	done
     )
-    sleep 300
+    sleep 10
 done
 
 exit $?
