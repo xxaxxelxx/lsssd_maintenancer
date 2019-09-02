@@ -5,7 +5,7 @@ MYSQL_HOST=$2
 MYSQL_PORT=$3
 WATCHLIST="$4"
 CONFIG="$5"
-MYSQLCMD="mysql -u root -p$MYSQL_ROOT_PASSWORD -D silenceDB -h $MYSQL_HOST -P $MYSQL_PORT"
+MYSQLCMD="mysql -u root -p$MYSQL_ROOT_PASSWORD -D silenceDB -h $MYSQL_HOST -P $MYSQL_PORT --connect-timeout=10"
 
 while true; do
 
